@@ -1,8 +1,10 @@
 package com.luscadogit.banco.modelo;
 
+import com.luscadogit.banco.modelo.excecao.SaldoInsuficienteException;
+
 import java.util.Objects;
 
-public class Conta {
+public abstract class Conta {
 
 //    encapsulamento das variaveis de instancia
     private Pessoa titular;
@@ -35,8 +37,8 @@ public class Conta {
             throw new IllegalArgumentException("Valor deve ser maior que 0");
         }
 
-        if (saldo - valor <0){
-            throw new IllegalStateException("Saldo insuficiente");
+        if (getSaldoDisponivel() - valor <0){
+            throw new SaldoInsuficienteException("Saldo insuficiente");
         }
         saldo -= valor;
     }
@@ -45,6 +47,8 @@ public class Conta {
     public void sacar(double valor, double taxaSaque) {
         sacar(valor + taxaSaque);
     }
+
+    public abstract void debitarTarifaMensal();
 
 //    metodos get e set
     public Pessoa getTitular() {
@@ -61,5 +65,9 @@ public class Conta {
 
     public double getSaldo() {
         return saldo;
+    }
+
+    public double getSaldoDisponivel() {
+        return getSaldo();
     }
 }
