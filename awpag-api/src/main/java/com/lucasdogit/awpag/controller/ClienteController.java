@@ -1,29 +1,85 @@
 package com.lucasdogit.awpag.controller;
 
+import com.lucasdogit.awpag.domain.exception.NegocioException;
 import com.lucasdogit.awpag.domain.model.Cliente;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.lucasdogit.awpag.domain.repository.ClienteRepository;
+import com.lucasdogit.awpag.domain.service.CadastroClienteService;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
+@RequestMapping("/clientes") // mapeia todos os endpoints
+@AllArgsConstructor // cria construtores para todas as variaveis de instancia do controlador
 @RestController
 public class ClienteController {
 
-    @GetMapping("/clientes")
+    private final CadastroClienteService cadastroClienteService;
+    private final ClienteRepository clienteRepository;
+
+//    busca todos os clientes
+    @GetMapping // mapeia o endpoint
     public List<Cliente> listar() {
-        var cliente1 = new Cliente();
-        cliente1.setId(1L);
-        cliente1.setNome("Lucas Thiago Saiz Timoteo");
-        cliente1.setTelefone("41 99654-6683");
-        cliente1.setEmail("lucas.timoteo@awpag.com");
-
-        var cliente2 = new Cliente();
-        cliente2.setId(2L);
-        cliente2.setNome("Debora Saiz");
-        cliente2.setTelefone("41 99865-3097");
-        cliente2.setEmail("debora.saiz@awpag.com");
-
-        return Arrays.asList(cliente1, cliente2);
+        return clienteRepository.findAll();
     }
+
+//    busca cliente pelo ID
+    @GetMapping("/{clienteId}")
+    public ResponseEntity<Cliente> buscar(@PathVariable Long clienteId) {
+        Optional<Cliente> cliente = clienteRepository.findById(clienteId);
+
+        if (cliente.isPresent()){
+            return ResponseEntity.ok(cliente.get());
+        }
+
+        return ResponseEntity.notFound().build();
+    }
+
+//    adiciona clientes
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping
+    public Cliente adicionar(@Valid @RequestBody Cliente cliente) {
+        return cadastroClienteService.salvar(cliente);
+    }
+
+//    atualiza um cliente pelo ID
+    @PutMapping("/{clienteId}")
+    public ResponseEntity<Cliente> atualizar(@PathVariable Long clienteId,
+                                             @Valid @RequestBody Cliente cliente) {
+
+        if(!clienteRepository.existsById(clienteId)){
+            return ResponseEntity.notFound().build();
+        }
+
+        cliente.setId(clienteId);
+        cliente = cadastroClienteService.salvar(cliente);
+
+        return ResponseEntity.ok(cliente);
+    }
+
+//    deleta um cliente pelo ID
+    @DeleteMapping("/{clienteId}")
+    public ResponseEntity<Void> excluir(@PathVariable Long clienteId) {
+        if(!clienteRepository.existsById(clienteId)){
+            return ResponseEntity.notFound().build();
+        }
+
+        cadastroClienteService.excluir(clienteId);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @ExceptionHandler(NegocioException.class)
+    public ResponseEntity<String> capturar(NegocioException e) {
+        return ResponseEntity.badRequest().body(e.getMessage());
+    }
+
 }
