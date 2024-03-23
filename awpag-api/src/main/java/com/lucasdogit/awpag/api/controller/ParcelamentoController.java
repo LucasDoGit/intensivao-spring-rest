@@ -1,9 +1,10 @@
-package com.lucasdogit.awpag.controller;
+package com.lucasdogit.awpag.api.controller;
 
 import com.lucasdogit.awpag.domain.exception.NegocioException;
 import com.lucasdogit.awpag.domain.model.Parcelamento;
 import com.lucasdogit.awpag.domain.repository.ParcelamentoRepository;
 import com.lucasdogit.awpag.domain.service.ParcelamentoService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
@@ -35,12 +36,7 @@ public class ParcelamentoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Parcelamento cadastrar(@RequestBody Parcelamento parcelamento) {
+    public Parcelamento cadastrar(@Valid @RequestBody Parcelamento parcelamento) {
         return parcelamentoService.cadastrar(parcelamento);
-    }
-
-    @ExceptionHandler(NegocioException.class)
-    public ResponseEntity<String> capturar(NegocioException e) {
-        return ResponseEntity.badRequest().body(e.getMessage());
     }
 }

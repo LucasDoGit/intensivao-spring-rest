@@ -1,4 +1,4 @@
-package com.lucasdogit.awpag.controller;
+package com.lucasdogit.awpag.api.controller;
 
 import com.lucasdogit.awpag.domain.exception.NegocioException;
 import com.lucasdogit.awpag.domain.model.Cliente;
@@ -76,10 +76,4 @@ public class ClienteController {
 
         return ResponseEntity.noContent().build();
     }
-
-    @ExceptionHandler(NegocioException.class)
-    public ResponseEntity<String> capturar(NegocioException e) {
-        return ResponseEntity.badRequest().body(e.getMessage());
-    }
-
 }
