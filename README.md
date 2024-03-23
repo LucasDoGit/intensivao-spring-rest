@@ -42,7 +42,7 @@ git clone https://github.com/LucasDoGit/intensivao-spring-rest
 
 4. Abra o diretorio `/awpag-api` usando o IntelliJ IDEA, usando o Maven faça um build dos seguintes conjuntos de ciclo de vida:
 
-![Build Maven](./assets/build-maven.png)
+![Build Maven](./assets/build-maven-420.png)
 
 5. Pronto! É só dar um start no arquivo main localizado em: `awpag-api\src\main\java\com\lucasdogit\awpag\AwpagApiApplication.java`
 
