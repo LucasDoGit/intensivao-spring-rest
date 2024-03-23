@@ -37,10 +37,12 @@ git clone https://github.com/LucasDoGit/intensivao-spring-rest
 2. configure o MySQL para usar a porta padrão **3306**.
 
 3. Acesse o arquivo `awpag-api/src/main/resources/application.properties` e configure o seu usuário de acesso ao MySQL.
-   ![Build Maven](./assets/usuario-banco.png)
+
+![Build Maven](./assets/usuario-banco.png)
 
 4. Abra o diretorio `/awpag-api` usando o IntelliJ IDEA, usando o Maven faça um build dos seguintes conjuntos de ciclo de vida:
-   ![Build Maven](./assets/build-maven.png)
+
+![Build Maven](./assets/build-maven.png)
 
 5. Pronto! É só dar um start no arquivo main localizado em: `awpag-api\src\main\java\com\lucasdogit\awpag\AwpagApiApplication.java`
 
